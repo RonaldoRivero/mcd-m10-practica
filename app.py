@@ -2,12 +2,12 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.cluster import KMeans
 
 from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 st.set_page_config(page_title='Trabajo Práctico'
                    , page_icon=':shark:'
@@ -110,13 +110,22 @@ elif opcion == 'Limpiar y Preparar Datos':
             st.write("No ha seleccionado columnas.")
 
         st.write('Normalizar Columnas')
-        limpiar_datos = st.radio('Deseas normaliazar valores', ['Si', 'No'])
-        if limpiar_datos == 'Si':
+        limpiar_datos = st.radio('Deseas normaliazar valores', ['StandarScaler', 'MaxMin', 'No'])
+        if limpiar_datos == 'StandarScaler':
             if st.button('Confirmar'):
                 with st.spinner('Normalizando valores'):
-                    df.dropna(inplace=True)
                     st.write('Valores normalizados')
                     df_normalizado = pd.DataFrame(StandardScaler().fit_transform(df), columns=df.columns)
+
+                st.session_state.df_normalizado = df_normalizado
+                st.success('Valores normalizados')
+                st.write(df_normalizado.head())
+        elif limpiar_datos == 'MaxMin':
+            if st.button('Confirmar'):
+                with st.spinner('Normalizando valores'):
+                    st.write('Valores normalizados')
+                    scaler = MinMaxScaler()
+                    df_normalizado =  pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
 
                 st.session_state.df_normalizado = df_normalizado
                 st.success('Valores normalizados')
