@@ -52,9 +52,9 @@ elif opcion == 'Analisis de Datos':
         st.warning('Por favor carga un archivo')
     else:
         df = st.session_state.df
-        st.subheader('primeras 5 filas')
+        st.subheader('Primeras 5 filas')
         st.write(df.head())
-        st.subheader('Informacion del dataframe')
+        st.subheader('Información descriptiva del dataset')
         st.write(df.describe())
 
 elif opcion == 'Limpiar y Preparar Datos':
@@ -161,11 +161,14 @@ elif opcion == 'PCA':
         pca = PCA()
         datos_pca = pca.fit_transform(df_normalizado)
 
-        st.write('Varianza Explicada:', pca.explained_variance_)
-        st.write('Varianza Explicada:', pca.explained_variance_ratio_)
-
-        varianza_acumulada = np.cumsum(pca.explained_variance_ratio_)
-        st.write('Varianza Acumulada:', varianza_acumulada)
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.write('Varianza Explicada:', pca.explained_variance_)
+        with col2:
+            st.write('Varianza Explicada:', pca.explained_variance_ratio_)
+        with col3:
+            varianza_acumulada = np.cumsum(pca.explained_variance_ratio_)
+            st.write('Varianza Acumulada:', varianza_acumulada)
 
         fig = plt.figure(figsize=(8, 8))
         plt.plot(varianza_acumulada)
