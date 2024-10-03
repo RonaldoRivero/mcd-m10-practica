@@ -67,11 +67,14 @@ elif opcion == 'Limpiar y Preparar Datos':
         st.subheader('Limpiar Datos')
         columnas = df.columns.tolist()
         columnas_a_eliminar = st.multiselect("Selecciona las columnas que deseas eliminar", columnas)
-        if columnas_a_eliminar:
-            df = df.drop(columns=columnas_a_eliminar)
-            st.write("datos después de eliminar las columnas seleccionadas:")
-            st.write(df.head())
-            st.session_state.df = df
+        if len(columnas_a_eliminar) > 0:
+            if st.button('Eliminar Columna'):
+                with st.spinner('Eliminando columnas'):
+                    df = df.drop(columns=columnas_a_eliminar)
+                    st.write("datos después de eliminar las columnas seleccionadas:")
+                    st.write(df.head())
+
+                st.session_state.df = df
         else:
             st.write("No se han seleccionado columnas para eliminar.")
 
@@ -112,7 +115,7 @@ elif opcion == 'Limpiar y Preparar Datos':
         st.write('Normalizar Columnas')
         limpiar_datos = st.radio('Deseas normaliazar valores', ['StandarScaler', 'MaxMin', 'No'])
         if limpiar_datos == 'StandarScaler':
-            if st.button('Confirmar'):
+            if st.button('Normalizar StandarScaler'):
                 with st.spinner('Normalizando valores'):
                     st.write('Valores normalizados')
                     df_normalizado = pd.DataFrame(StandardScaler().fit_transform(df), columns=df.columns)
@@ -121,7 +124,7 @@ elif opcion == 'Limpiar y Preparar Datos':
                 st.success('Valores normalizados')
                 st.write(df_normalizado.head())
         elif limpiar_datos == 'MaxMin':
-            if st.button('Confirmar'):
+            if st.button('Normalizar MaxMin'):
                 with st.spinner('Normalizando valores'):
                     st.write('Valores normalizados')
                     scaler = MinMaxScaler()
